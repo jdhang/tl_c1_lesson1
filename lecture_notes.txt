@@ -1,0 +1,20 @@
+Introduction to Ruby and Web Development
+  Lecture Notes:
+- Job hiring depends on what you are looking for
+  - Github
+  - What he usually looks for:
+    - Capability, can you build something from end to end
+      - Important to learn how to build end to end
+      - *Demonstrate how to build applications/features, end to end
+    - Intelligence, less important, hard to test that
+- Ruby Exercies:
+  - nil and false are considered "false" in Ruby, everything else is true
+  - All things in Ruby are objects
+  - White space is not important in Ruby
+- Simple Calculator App
+  - Keep raw data in its form
+  - 1. string inerpolation vs. concat
+  - 2. extract repetitive logic to methods
+  - 3. keep track of variable types (class)
+  - 4. varialbe scope determined by do...end; outer scope vars are available to inner scope, but not visa-versa. 
+  - 5. pass by reference vs. pass by value; if method mutates caller, outer obj was modified.
