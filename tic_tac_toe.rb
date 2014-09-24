@@ -1,13 +1,14 @@
 require 'pry'
 
 def show_board(array)
+  system 'clear'
   row = "     |     |     "
   boundary = "-----+-----+-----"
   one_to_three = "  #{array[0]}  |  #{array[1]}  |  #{array[2]}  "
   four_to_six = "  #{array[3]}  |  #{array[4]}  |  #{array[5]}  "
   seven_to_nine = "  #{array[6]}  |  #{array[7]}  |  #{array[8]}  "
 
-  board = [row, one_to_three, row, boundary, row, four_to_six, row,
+  board = [" ", row, one_to_three, row, boundary, row, four_to_six, row,
            boundary, row, seven_to_nine, row, " "]
 
   board.each {|i| puts i}
