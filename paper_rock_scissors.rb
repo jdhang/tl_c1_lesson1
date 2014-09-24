@@ -8,54 +8,28 @@ require 'pry'
 # prompt user if they want to play again (loop do...break if)
 
 def winner(user, computer)
-  if user == 'p'
-    if computer == 'p'
-      puts "It's a tie."
-    elsif computer == 'r'
-      puts "You won!"
-    elsif computer == 's'
-      puts "Computer won!"
-    end
-  elsif user == 'r'
-    if computer == 'p'
-      puts "Computer won!"
-    elsif computer == 'r'
-      puts "It's a tie."
-    elsif computer == 's'
-      puts "You won!"
-    end
-  elsif user == 's'
-    if computer == 'p'
-      puts "You won!"
-    elsif computer == 'r'
-      puts "Computer won!"
-    elsif computer == 's'
-      puts "It's a tie."
-    end
+  winner = ""
+  if (user == 'p' && computer == 'r')||
+     (user == 's' && computer == 'p') ||
+     (user == 'r' && computer == 's')
+    winner = "You"
+  elsif (computer == 'p' && user == 'r')||
+     (computer == 's' && user == 'p') ||
+     (computer == 'r' && user == 's')
+    winner = "Computer"
+  else
+    winner = "tie"
+  end
+  
+  if winner == "tie"
+    puts "It's a tie!"
+  else
+    puts "#{winner} won!"
   end
 end
 
-def to_word(input)
-  if input == 'p'
-    "Paper"
-  elsif input == 'r'
-    "Rock"
-  elsif input == 's'
-    "Scissor"
-  end
-end
-
-def comp_choice()
-  rand = Random.new
-  choice = rand.rand(1..3)
-  if choice == 1
-    "p"
-  elsif choice == 2
-    "r"
-  elsif choice == 3
-    "s"
-  end
-end
+comp_choices = ['p', 'r', 's']
+to_word = {'p' => "Paper", 'r' => "Rock", 's' => "Scissor"}
 
 puts "Play Paper Rock Scissors!"
 loop do
@@ -65,9 +39,9 @@ loop do
     user = gets.chomp.downcase
     break if user == 'r' || user == 'p' || user == 's'
   end
-  comp = comp_choice
+  comp = comp_choices.sample
 
-  puts "You picked #{to_word(user)} and computer picked #{to_word(comp)}."
+  puts "You picked #{to_word[user]} and computer picked #{to_word[comp]}."
   winner(user,comp)
 
   puts "Play again? (Y/N)"
