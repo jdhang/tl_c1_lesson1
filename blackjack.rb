@@ -50,12 +50,19 @@ def start_game(player, dealer, deck)
   dealer[:cards].push(deal(deck))
 end
 
-def hit_or_stay(option, player, deck)
-  if option == "hit"
+def hit_or_stay(player, deck)
+  puts "Hit or Stay?"
+  option = gets.chomp.downcase
+  if option == "hit" || option == "h"
     player[:cards].push(deal(deck))
     display_hand(player)
+    true
+  elsif option == "stay" || option == "s"
+    puts "You choose to Stay!"
+    true
   else
-    puts "Staying? Okay!"
+    puts "Huh? Invalid input, try again!"
+    false
   end
 end
 
@@ -192,11 +199,9 @@ loop do
   game_status = blackjack?(player)
   unless game_status[:game_over]
     begin
-      puts "Hit or Stay?"
-      option = gets.chomp.downcase
-      hit_or_stay(option, player, deck)
+      exiting = hit_or_stay(player, deck)
       game_status = blackjack?(player)
-    end until option == "stay" || game_status[:game_over]
+    end until exiting == true || game_status[:game_over]
     unless game_status[:game_over]
       begin
         dealers_turn(dealer, deck)
