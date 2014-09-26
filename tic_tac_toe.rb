@@ -1,7 +1,7 @@
+
 require 'pry'
 
 def show_board(array)
-  system 'clear'
   row = "     |     |     "
   boundary = "-----+-----+-----"
   one_to_three = "  #{array[0]}  |  #{array[1]}  |  #{array[2]}  "
