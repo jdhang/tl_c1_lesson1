@@ -15,7 +15,7 @@ require 'pry'
 # --- METHODS ---
 def create_deck(num)
   suits = ['Heart', 'Diamond', 'Spade', 'Club']
-  values = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']
+  values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
   deck = Array.new
   
   num.times do
@@ -30,9 +30,7 @@ def create_deck(num)
 end
 
 def deal(deck)
-  card = deck.sample
-  deck.delete(card)
-  card
+  deck.shuffle!.pop
 end
 
 def create_player()
@@ -56,7 +54,7 @@ def hit_or_stay(player, deck)
   if option == "hit" || option == "h"
     player[:cards].push(deal(deck))
     display_hand(player)
-    true
+    false
   elsif option == "stay" || option == "s"
     puts "You choose to Stay!"
     true
@@ -75,47 +73,50 @@ def dealers_turn(player, deck)
     display_hand(player)
   end
   if get_total(cards) < 17
-    puts "Dealer hits"
-    cards.push(deal(deck))
-    display_hand(player)
+    card = deal(deck)
+    cards.push(card)
+    if card[:value] == "Ace"
+      text = "=> Dealer hits and draws an "
+    else
+      text = "=> Dealer hits and draws a "
+    end
+    puts "-------------------------------------------"
+    puts text + "#{card[:value]} of #{card[:suit]}s"
+    puts "=> Dealer's Card total: #{get_total(cards)}"
+    puts "-------------------------------------------"
+    puts
   end  
 end
 
 def display_hand(player)
   puts
   puts player[:name] == "dealer" ? "Dealer's Hand:" : "Your Hand:"
-  face_cards = {'A' => "Ace", 'K' => "King", 'Q' => "Queen", 'J' => "Jack"}
   player[:cards].each do |card|
-    face_cards.has_key?(card[:value]) ? value = face_cards[card[:value]] : value = card[:value]
-    puts "=> #{value} of #{card[:suit]}s"
+    puts "=> #{card[:value]} of #{card[:suit]}s"
   end
   total = get_total(player[:cards])
   puts "Card total: #{total}"
+  puts "---------------"
   puts
 end
 
 def get_total(cards)
   total = 0
-  face_cards = ['J', 'Q', 'K']
+  ace_count = 0
   cards.each do |card|
-    if face_cards.include?(card[:value])
+    if card[:value] == "Ace"
+      total += 11
+      ace_count += 1
+    elsif (card[:value] =~ /J|Q|K/) == 0
       total += 10
-    elsif card[:value] == "A"
-      if (total + 11) <= 21
-        total += 11
-      elsif (total + 1) <= 21
-        total += 1
-      else
-        total += 1
-      end
     else
       total += card[:value]
     end
   end
+  total -= (ace_count * 10) if total > 22
   total
 end
 
-# modify this so it just checks if game is over
 def blackjack?(player)
   total = get_total(player[:cards])
   check = {game_over: true, status: ""}
@@ -178,6 +179,8 @@ end
 # --- END OF METHODS ---
 
 # --- START OF PROGRAM ---
+system "clear"
+puts
 puts "Welcome to Blackjack!"
 
 deck_num = 2
@@ -188,7 +191,9 @@ player = create_player
 puts "Let's start with your name:"
 player[:name] = gets.chomp
 puts
+puts "--------------------------------------------"
 puts "Hi #{player[:name]}! Let's start playing!"
+puts "--------------------------------------------"
 
 loop do
   deck = create_deck(deck_num)
@@ -209,10 +214,13 @@ loop do
       end until game_status[:game_over] || game_status[:status] == "d_max"
     end
     winner = compare(player, dealer) unless game_status[:game_over]
-    announce(winner, game_status, player)
   end
+  announce(winner, game_status, player)
   puts
   puts "Play again? (Y/N)"
   break if gets.chomp.downcase != "y"
+  puts
+  puts "----------------------------------------"
+  puts "Okay #{player[:name]}, let's play again!"
 end
 # --- END OF PROGRAM ---
